@@ -3,8 +3,11 @@ from kafka.admin import KafkaAdminClient, NewTopic
 
 class KafkaClient:
     def __init__(self, client, url="localhost:9092"):
-        self.client = KafkaAdminClient(
-            bootstrap_servers=url, client_id=client)
+        try:
+            self.client = KafkaAdminClient(
+                bootstrap_servers=url, client_id=client)
+        except Exception as excp:
+            print(f"[ERROR] - could not connect to kafka: {str(excp)}")
 
     def create_topics(self, topics):
         topics_list = [NewTopic(name=topic,
@@ -16,3 +19,4 @@ class KafkaClient:
 
     def close(self):
         self.client.close()
+        print("[INFO] - kafka connection closed")
