@@ -1,12 +1,15 @@
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
+from json import dumps
 
 
 class Producer:
     def __init__(self, url="localhost:9092"):
         try:
             self.producer = KafkaProducer(
-                bootstrap_servers=url)
+                bootstrap_servers=url,
+                value_serializer=lambda x:
+                dumps(x).encode('utf-8'))
         except Exception as excp:
             print(f"[ERROR] - could not connect to kafka: {str(excp)}")
 
@@ -19,7 +22,7 @@ class Producer:
 
     def send(self, topic, msg):
         self.producer.send(
-            topic, msg.encode()).add_callback(self.success_call_back).add_errback(self.error_call_back)
+            topic, value=msg).add_callback(self.success_call_back).add_errback(self.error_call_back)
         self.producer.flush()
 
     def close(self):
