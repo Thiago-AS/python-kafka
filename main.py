@@ -1,6 +1,6 @@
-from app.client import KafkaClient
-from app.producer import Producer
-from app.consumer import Consumer
+from app.kafka.client import KafkaClient
+from app.kafka.producer import Producer
+from app.kafka.consumer import Consumer
 
 # ~/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test_topic --from-beginning
 
